@@ -1,53 +1,49 @@
 cff-version: 1.2.0
 message: 'If you use this software, please cite it as below.'
 type: software
-title: 'CodeCRDT: Real-time Collaborative Code Editing Platform'
-abstract: 'CodeCRDT is a real-time collaborative code editing platform powered by Conflict-free Replicated Data Types (CRDTs) and AI agents. It enables multiple developers to edit code simultaneously without conflicts, featuring integrated AI assistance for code generation, debugging, and optimization. The platform combines Monaco Editor with Yjs CRDT implementation, providing seamless synchronization across distributed sessions with sub-10ms latency for local operations.'
+title: 'CodeCRDT: Observation-Driven Coordination for Multi-Agent LLM Code Generation'
+abstract: 'Multi-agent LLM systems fail to realize parallel speedups due to costly coordination. CodeCRDT demonstrates an observation-driven coordination pattern: agents coordinate by monitoring shared state with observable updates and deterministic convergence, rather than through explicit message passing. This pattern is instantiated using Conflict-Free Replicated Data Types (CRDTs), which provide strong eventual consistency enabling lock-free, conflict-free concurrent code generation. Evaluation across 600 trials (6 tasks, 50 runs per mode) using Claude Sonnet 4.5 reveals task-dependent outcomes: parallel coordination achieves up to 21.1% speedup on decomposable tasks but incurs up to 39.4% slowdown on highly coupled tasks. Strong eventual consistency guarantees 100% convergence with zero merge failures, though 5-10% semantic conflicts require reconciliation.'
 keywords:
-  - collaborative editing
+  - Conflict-Free Replicated Data Types
+  - Multi-Agent Systems
+  - Large Language Models
+  - Distributed Synchronization
+  - Strong Eventual Consistency
+  - Parallel Code Generation
+  - observation-driven coordination
   - CRDT
-  - real-time collaboration
-  - code editor
-  - AI agents
-  - distributed systems
-  - conflict-free synchronization
-  - monaco editor
-  - yjs
-  - websocket
-  - software engineering
-  - pair programming
+  - LLM agents
+  - concurrent editing
+  - autonomous agents
 authors:
   - family-names: 'Pugachev'
     given-names: 'Sergey'
     orcid: 'https://orcid.org/0009-0008-5134-6411'
     email: 'sergey@spugachev.com'
 repository-code: 'https://github.com/spugachev/codecrdt'
-url: 'https://codecrdt.demo.com'
+url: 'https://github.com/spugachev/codecrdt'
 repository-artifact: 'https://github.com/spugachev/codecrdt/releases'
 license: MIT
 version: 1.0.0
-date-released: 2024-09-27
+date-released: 2025-10-19
 identifiers:
   - type: url
     value: 'https://github.com/spugachev/codecrdt'
     description: 'GitHub Repository'
-  - type: doi
-    value: '10.5281/zenodo.XXXXXXX'
-    description: 'Zenodo Archive (pending)'
 preferred-citation:
-  type: article
-  title: 'CodeCRDT: Enabling Conflict-Free Real-Time Collaboration in Software Development Through CRDT Technology'
+  type: conference-paper
+  title: 'CodeCRDT: Observation-Driven Coordination for Multi-Agent LLM Code Generation'
   authors:
     - family-names: 'Pugachev'
       given-names: 'Sergey'
       orcid: 'https://orcid.org/0009-0008-5134-6411'
-  year: 2024
-  journal: 'Journal of Collaborative Software Engineering'
-  volume: 1
-  issue: 1
-  start: 1
-  end: 15
-  doi: '10.XXXX/jcse.2024.XXXXX'
+      affiliation: 'Independent Researcher'
+  year: 2025
+  collection-title: 'Proceedings of the Conference on Machine Learning and Systems'
+  conference:
+    name: 'Conference on Machine Learning and Systems'
+  abbreviation: 'MLSys 2025'
+  url: 'https://github.com/spugachev/codecrdt'
 references:
   - type: software
     title: 'Yjs'
@@ -118,4 +114,4 @@ contact:
   - family-names: 'Pugachev'
     given-names: 'Sergey'
     email: 'sergey@spugachev.com'
-    affiliation: 'CodeCRDT Project'
+    affiliation: 'Independent Researcher'
