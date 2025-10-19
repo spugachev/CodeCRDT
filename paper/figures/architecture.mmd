@@ -1,0 +1,27 @@
+%%{init: {'theme':'base','themeVariables':{'fontSize':'16px','fontFamily':'Arial, sans-serif'}}}%%
+flowchart TB
+    O["<b>Outliner Agent</b><br/><br/>Creates TODO skeleton structure"]
+    
+    subgraph P["&nbsp;&nbsp;"]
+        A1["<b>Agent 1</b>"]
+        A2["<b>Agent 2</b>"]
+        A3["<b>Agent N</b>"]
+    end
+    
+    S["<b>Shared CRDT State</b><br/><br/><i>Deterministic convergence (SEC)</i><br/>&nbsp;"]
+    
+    O --> S
+    S -->|"<b>observe updates</b>"| P
+    P -->|"<b>claim & edit</b>"| S
+    
+    classDef outline fill:#FFF8E1,stroke:#F57C00,stroke-width:3,color:#1a1a1a,padding:20px,rx:8,ry:8
+    classDef agents fill:#E8F5E9,stroke:#388E3C,stroke-width:2.5,color:#1a1a1a,padding:16px,rx:6,ry:6
+    classDef state fill:#E3F2FD,stroke:#1976D2,stroke-width:3.5,color:#1a1a1a,padding:20px,rx:8,ry:8
+    classDef subgraphStyle fill:#F5F5F5,stroke:#757575,stroke-width:2.5,rx:8,ry:8,padding:20px
+    
+    class O outline
+    class A1,A2,A3 agents
+    class S state
+    class P subgraphStyle
+    
+    linkStyle default stroke:#546E7A,stroke-width:2.5

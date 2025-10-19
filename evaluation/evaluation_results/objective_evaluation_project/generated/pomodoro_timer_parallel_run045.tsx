@@ -1,0 +1,668 @@
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { Button } from '@/components/ui/button';
+import { Play, Pause, RotateCcw, Settings } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
+
+interface TimerMode {
+  type: 'work' | 'shortBreak' | 'longBreak';
+  duration: number;
+  label: string;
+}
+
+interface TimerSettings {
+  workDuration: number;
+  shortBreakDuration: number;
+  longBreakDuration: number;
+  longBreakInterval: number;
+}
+
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  duration: number;
+  delay: number;
+}
+interface ConfettiParticle {
+  id: number;
+  x: number;
+  y: number;
+  rotation: number;
+  scale: number;
+  color: string;
+}
+
+const defaultSettings: TimerSettings = {
+  workDuration: 25,
+  shortBreakDuration: 5,
+  longBreakDuration: 15,
+  longBreakInterval: 4
+};
+
+const timerModes: Record<string, { colors: string; gradient: string }> = {
+  work: {
+    colors: 'from-rose-500 via-pink-500 to-purple-500',
+    gradient: 'bg-gradient-to-br from-rose-500/20 via-pink-500/20 to-purple-500/20'
+  },
+  shortBreak: {
+    colors: 'from-cyan-500 via-blue-500 to-indigo-500',
+    gradient: 'bg-gradient-to-br from-cyan-500/20 via-blue-500/20 to-indigo-500/20'
+  },
+  longBreak: {
+    colors: 'from-emerald-500 via-teal-500 to-cyan-500',
+    gradient: 'bg-gradient-to-br from-emerald-500/20 via-teal-500/20 to-cyan-500/20'
+  }
+};
+
+export default function PomodoroTimer() {
+  const [settings, setSettings] = useState<TimerSettings>(defaultSettings);
+  const [currentMode, setCurrentMode] = useState<'work' | 'shortBreak' | 'longBreak'>('work');
+  const [timeLeft, setTimeLeft] = useState(settings.workDuration * 60);
+  const [isRunning, setIsRunning] = useState(false);
+  const [completedPomodoros, setCompletedPomodoros] = useState(0);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showCompletion, setShowCompletion] = useState(false);
+  const [particles, setParticles] = useState<Particle[]>([]);
+  
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const totalTime = currentMode === 'work' 
+    ? settings.workDuration * 60 
+    : currentMode === 'shortBreak'
+    ? settings.shortBreakDuration * 60
+    : settings.longBreakDuration * 60;
+
+  const progress = ((totalTime - timeLeft) / totalTime) * 100;
+
+  useEffect(() => {
+    const generatedParticles: Particle[] = Array.from({ length: 50 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 4 + 2,
+      duration: Math.random() * 20 + 10,
+      delay: Math.random() * 5
+    }));
+    setParticles(generatedParticles);
+  }, []);
+  const triggerConfetti = useCallback(() => {
+    const colors = currentMode === 'work' 
+      ? ['#f43f5e', '#ec4899', '#a855f7']
+      : currentMode === 'shortBreak'
+      ? ['#06b6d4', '#3b82f6', '#6366f1']
+      : ['#10b981', '#14b8a6', '#06b6d4'];
+
+    const duration = 3000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 100 };
+
+    const randomInRange = (min: number, max: number) => {
+      return Math.random() * (max - min) + min;
+    };
+
+    const interval: NodeJS.Timeout = setInterval(() => {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+        colors: colors
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+        colors: colors
+      });
+    }, 250);
+
+    // Play completion sound
+    if (audioRef.current) {
+      audioRef.current.play().catch(() => {
+        // Ignore autoplay errors
+      });
+    }
+  }, [currentMode]);
+
+  useEffect(() => {
+    if (isRunning && timeLeft > 0) {
+      intervalRef.current = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            setIsRunning(false);
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+              intervalRef.current = null;
+            }
+            
+            // Show completion animation
+            setShowCompletion(true);
+            triggerConfetti();
+            
+            // Update pomodoro count and switch mode
+            if (currentMode === 'work') {
+              const newCount = completedPomodoros + 1;
+              setCompletedPomodoros(newCount);
+              
+              // Determine next mode
+              const nextMode = newCount % settings.longBreakInterval === 0 
+                ? 'longBreak' 
+                : 'shortBreak';
+              
+              setTimeout(() => {
+                setShowCompletion(false);
+                setCurrentMode(nextMode);
+                const nextDuration = nextMode === 'longBreak'
+                  ? settings.longBreakDuration * 60
+                  : settings.shortBreakDuration * 60;
+                setTimeLeft(nextDuration);
+              }, 3000);
+            } else {
+              setTimeout(() => {
+                setShowCompletion(false);
+                setCurrentMode('work');
+                setTimeLeft(settings.workDuration * 60);
+              }, 3000);
+            }
+            
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else if (!isRunning && intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
+  }, [isRunning, currentMode, completedPomodoros, settings, triggerConfetti]);
+
+  // Create audio element for completion sound
+  useEffect(() => {
+    // Create a simple beep sound using Web Audio API
+    const createBeepSound = () => {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.value = 800;
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.5);
+    };
+
+    audioRef.current = {
+      play: () => Promise.resolve(createBeepSound())
+    } as any;
+  }, []);
+
+  useEffect(() => {
+    if (isRunning && timeLeft > 0) {
+      intervalRef.current = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else if (timeLeft === 0 && isRunning) {
+      setIsRunning(false);
+      setShowCompletion(true);
+      
+      // Play completion sound
+      if (audioRef.current) {
+        audioRef.current.play().catch(() => {
+          // Silently handle if audio playback fails
+        });
+      }
+
+      // Auto-switch to next mode
+      if (currentMode === 'work') {
+        const newCompletedPomodoros = completedPomodoros + 1;
+        setCompletedPomodoros(newCompletedPomodoros);
+        
+        // Determine next break type
+        if (newCompletedPomodoros % settings.longBreakInterval === 0) {
+          setCurrentMode('longBreak');
+          setTimeLeft(settings.longBreakDuration * 60);
+        } else {
+          setCurrentMode('shortBreak');
+          setTimeLeft(settings.shortBreakDuration * 60);
+        }
+      } else {
+        // Break finished, return to work
+        setCurrentMode('work');
+        setTimeLeft(settings.workDuration * 60);
+      }
+
+      // Hide completion animation after 3 seconds
+      setTimeout(() => {
+        setShowCompletion(false);
+      }, 3000);
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isRunning, timeLeft, currentMode, completedPomodoros, settings]);
+
+  const handlePlayPause = useCallback(() => {
+    setIsRunning(!isRunning);
+  }, [isRunning]);
+
+  const handleReset = useCallback(() => {
+    setIsRunning(false);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    const duration = currentMode === 'work' 
+      ? settings.workDuration * 60 
+      : currentMode === 'shortBreak'
+      ? settings.shortBreakDuration * 60
+      : settings.longBreakDuration * 60;
+    setTimeLeft(duration);
+  }, [currentMode, settings]);
+
+  const handleModeSwitch = useCallback((mode: 'work' | 'shortBreak' | 'longBreak') => {
+        setCurrentMode(mode);
+    setIsRunning(false);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    
+    const newDuration = mode === 'work' 
+      ? settings.workDuration * 60 
+      : mode === 'shortBreak'
+      ? settings.shortBreakDuration * 60
+      : settings.longBreakDuration * 60;
+    
+    setTimeLeft(newDuration);
+  }, [settings]);
+
+  const formatTime = useCallback((seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }, []);
+  const handleSaveSettings = useCallback((newSettings: TimerSettings) => {
+    setSettings(newSettings);
+    setShowSettings(false);
+    
+    // Update current timer if mode duration changed
+    const newDuration = currentMode === 'work'
+      ? newSettings.workDuration * 60
+      : currentMode === 'shortBreak'
+      ? newSettings.shortBreakDuration * 60
+      : newSettings.longBreakDuration * 60;
+    
+    setTimeLeft(newDuration);
+    setIsRunning(false);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, [currentMode]);
+
+  return (
+    <div className={`min-h-screen relative overflow-hidden transition-all duration-1000 ${timerModes[currentMode].gradient}`}>
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {particles.map((particle) => (
+          <motion.div
+            key={particle.id}
+            className={`absolute rounded-full bg-gradient-to-br ${timerModes[currentMode].colors} opacity-20`}
+            style={{
+              left: `${particle.x}%`,
+              top: `${particle.y}%`,
+              width: particle.size,
+              height: particle.size,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              opacity: [0.2, 0.5, 0.2],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: particle.duration,
+              delay: particle.delay,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+      
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-8">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="w-full max-w-2xl"
+        >
+          <div className="backdrop-blur-xl bg-white/10 rounded-3xl p-8 shadow-2xl border border-white/20">
+            <div className="flex justify-between items-center mb-8">
+              <h1 className="text-4xl font-bold text-white">Pomodoro Timer</h1>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowSettings(!showSettings)}
+                className="text-white hover:bg-white/20"
+              >
+                <Settings className="w-6 h-6" />
+              </Button>
+            </div>
+
+            <div className="flex gap-2 mb-8">
+              <Button
+                variant={currentMode === 'work' ? 'default' : 'ghost'}
+                onClick={() => handleModeSwitch('work')}
+                className={`flex-1 ${
+                  currentMode === 'work'
+                    ? 'bg-white text-rose-600 hover:bg-white/90'
+                    : 'text-white hover:bg-white/20'
+                }`}
+              >
+                Work
+              </Button>
+              <Button
+                variant={currentMode === 'shortBreak' ? 'default' : 'ghost'}
+                onClick={() => handleModeSwitch('shortBreak')}
+                className={`flex-1 ${
+                  currentMode === 'shortBreak'
+                    ? 'bg-white text-cyan-600 hover:bg-white/90'
+                    : 'text-white hover:bg-white/20'
+                }`}
+              >
+                Short Break
+              </Button>
+              <Button
+                variant={currentMode === 'longBreak' ? 'default' : 'ghost'}
+                onClick={() => handleModeSwitch('longBreak')}
+                className={`flex-1 ${
+                  currentMode === 'longBreak'
+                    ? 'bg-white text-emerald-600 hover:bg-white/90'
+                    : 'text-white hover:bg-white/20'
+                }`}
+              >
+                Long Break
+              </Button>
+            </div>
+
+            <div className="flex justify-center items-center my-12">
+              <div className="relative w-80 h-80">
+                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 320 320">
+                  <circle
+                    cx="160"
+                    cy="160"
+                    r="140"
+                    stroke="rgba(255, 255, 255, 0.1)"
+                    strokeWidth="12"
+                    fill="none"
+                  />
+                  <motion.circle
+                    cx="160"
+                    cy="160"
+                    r="140"
+                    stroke="url(#gradient)"
+                    strokeWidth="12"
+                    fill="none"
+                    strokeLinecap="round"
+                    strokeDasharray={2 * Math.PI * 140}
+                    strokeDashoffset={2 * Math.PI * 140 * (1 - progress / 100)}
+                    initial={{ strokeDashoffset: 2 * Math.PI * 140 }}
+                    animate={{ strokeDashoffset: 2 * Math.PI * 140 * (1 - progress / 100) }}
+                    transition={{ duration: 0.5, ease: "easeInOut" }}
+                  />
+                  <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor={currentMode === 'work' ? '#f43f5e' : currentMode === 'shortBreak' ? '#06b6d4' : '#10b981'} />
+                      <stop offset="50%" stopColor={currentMode === 'work' ? '#ec4899' : currentMode === 'shortBreak' ? '#3b82f6' : '#14b8a6'} />
+                      <stop offset="100%" stopColor={currentMode === 'work' ? '#a855f7' : currentMode === 'shortBreak' ? '#6366f1' : '#06b6d4'} />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <motion.div
+                    key={timeLeft}
+                    initial={{ scale: 1 }}
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 0.3 }}
+                    className="text-7xl font-bold text-white mb-2"
+                  >
+                    {formatTime(timeLeft)}
+                  </motion.div>
+                  <p className="text-white/80 text-lg capitalize">{currentMode.replace(/([A-Z])/g, ' $1').trim()}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center mb-8">
+              <motion.div
+                key={timeLeft}
+                initial={{ scale: 1 }}
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 0.3 }}
+                className="text-7xl font-bold text-white mb-4"
+              >
+                {formatTime(timeLeft)}
+              </motion.div>
+              <p className="text-white/80 text-xl capitalize">
+                {currentMode === 'work' ? 'Focus Time' : currentMode === 'shortBreak' ? 'Short Break' : 'Long Break'}
+              </p>
+            </div>
+
+            <div className="flex justify-center gap-4 mb-6">
+              <Button
+                onClick={handlePlayPause}
+                size="lg"
+                className="bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm border border-white/30 px-8"
+              >
+                {isRunning ? (
+                  <>
+                    <Pause className="w-5 h-5 mr-2" />
+                    Pause
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-5 h-5 mr-2" />
+                    Start
+                  </>
+                )}
+              </Button>
+              <Button
+                onClick={handleReset}
+                size="lg"
+                variant="ghost"
+                className="text-white hover:bg-white/20"
+              >
+                <RotateCcw className="w-5 h-5 mr-2" />
+                Reset
+              </Button>
+            </div>
+
+            <div className="text-center text-white/60">
+              <p>Completed Pomodoros: {completedPomodoros}</p>
+            </div>
+          </div>
+
+          
+<AnimatePresence>
+            {showSettings && (
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="mt-6 backdrop-blur-xl bg-white/10 rounded-3xl p-8 shadow-2xl border border-white/20"
+              >
+                <h2 className="text-2xl font-bold text-white mb-6">Timer Settings</h2>
+                
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="work-duration" className="text-white text-lg">
+                      Work Duration (minutes)
+                    </Label>
+                    <Input
+                      id="work-duration"
+                      type="number"
+                      min="1"
+                      max="60"
+                      defaultValue={settings.workDuration}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value) || 1;
+                        setSettings(prev => ({ ...prev, workDuration: value }));
+                      }}
+                      className="bg-white/20 border-white/30 text-white placeholder:text-white/50 backdrop-blur-sm text-lg"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="short-break-duration" className="text-white text-lg">
+                      Short Break Duration (minutes)
+                    </Label>
+                    <Input
+                      id="short-break-duration"
+                      type="number"
+                      min="1"
+                      max="30"
+                      defaultValue={settings.shortBreakDuration}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value) || 1;
+                        setSettings(prev => ({ ...prev, shortBreakDuration: value }));
+                      }}
+                      className="bg-white/20 border-white/30 text-white placeholder:text-white/50 backdrop-blur-sm text-lg"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="long-break-duration" className="text-white text-lg">
+                      Long Break Duration (minutes)
+                    </Label>
+                    <Input
+                      id="long-break-duration"
+                      type="number"
+                      min="1"
+                      max="60"
+                      defaultValue={settings.longBreakDuration}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value) || 1;
+                        setSettings(prev => ({ ...prev, longBreakDuration: value }));
+                      }}
+                      className="bg-white/20 border-white/30 text-white placeholder:text-white/50 backdrop-blur-sm text-lg"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="long-break-interval" className="text-white text-lg">
+                      Long Break Interval (pomodoros)
+                    </Label>
+                    <Input
+                      id="long-break-interval"
+                      type="number"
+                      min="2"
+                      max="10"
+                      defaultValue={settings.longBreakInterval}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value) || 2;
+                        setSettings(prev => ({ ...prev, longBreakInterval: value }));
+                      }}
+                      className="bg-white/20 border-white/30 text-white placeholder:text-white/50 backdrop-blur-sm text-lg"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-4 mt-8">
+                  <Button
+                    onClick={() => handleSaveSettings(settings)}
+                    className="flex-1 bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm border border-white/30 text-lg py-6"
+                  >
+                    Save Settings
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setSettings(settings);
+                      setShowSettings(false);
+                    }}
+                    variant="ghost"
+                    className="flex-1 text-white hover:bg-white/20 text-lg py-6"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+          {showCompletion && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
+            >
+              <motion.div
+                initial={{ y: 50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="backdrop-blur-xl bg-white/20 rounded-3xl p-12 shadow-2xl border border-white/30"
+              >
+                <motion.div
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 5, -5, 0]
+                  }}
+                  transition={{
+                    duration: 0.6,
+                    repeat: 3,
+                    ease: "easeInOut"
+                  }}
+                  className="text-center"
+                >
+                  <div className="text-8xl mb-4">🎉</div>
+                  <h2 className="text-4xl font-bold text-white mb-2">
+                    {currentMode === 'work' ? 'Great Work!' : 'Break Complete!'}
+                  </h2>
+                  <p className="text-xl text-white/80">
+                    {currentMode === 'work' 
+                      ? 'Time for a well-deserved break!' 
+                      : 'Ready to focus again?'}
+                  </p>
+                </motion.div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        </motion.div>
+      </div>
+    </div>
+  );
+}

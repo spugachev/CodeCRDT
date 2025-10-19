@@ -1,0 +1,121 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "CodeCRDT: Real-time Collaborative Code Editing Platform"
+abstract: "CodeCRDT is a real-time collaborative code editing platform powered by Conflict-free Replicated Data Types (CRDTs) and AI agents. It enables multiple developers to edit code simultaneously without conflicts, featuring integrated AI assistance for code generation, debugging, and optimization. The platform combines Monaco Editor with Yjs CRDT implementation, providing seamless synchronization across distributed sessions with sub-10ms latency for local operations."
+keywords:
+  - collaborative editing
+  - CRDT
+  - real-time collaboration
+  - code editor
+  - AI agents
+  - distributed systems
+  - conflict-free synchronization
+  - monaco editor
+  - yjs
+  - websocket
+  - software engineering
+  - pair programming
+authors:
+  - family-names: "Pugachev"
+    given-names: "Sergey"
+    orcid: "https://orcid.org/0009-0008-5134-6411"
+    email: "contact@codecrdt.io"
+repository-code: "https://github.com/spugachev/collaborative-agents"
+url: "https://codecrdt.demo.com"
+repository-artifact: "https://github.com/spugachev/collaborative-agents/releases"
+license: MIT
+version: 1.0.0
+date-released: 2024-09-27
+identifiers:
+  - type: url
+    value: "https://github.com/spugachev/collaborative-agents"
+    description: "GitHub Repository"
+  - type: doi
+    value: "10.5281/zenodo.XXXXXXX"
+    description: "Zenodo Archive (pending)"
+preferred-citation:
+  type: article
+  title: "CodeCRDT: Enabling Conflict-Free Real-Time Collaboration in Software Development Through CRDT Technology"
+  authors:
+    - family-names: "Pugachev"
+      given-names: "Sergey"
+      orcid: "https://orcid.org/0009-0008-5134-6411"
+  year: 2024
+  journal: "Journal of Collaborative Software Engineering"
+  volume: 1
+  issue: 1
+  start: 1
+  end: 15
+  doi: "10.XXXX/jcse.2024.XXXXX"
+references:
+  - type: software
+    title: "Yjs"
+    authors:
+      - family-names: "Jahns"
+        given-names: "Kevin"
+    year: 2023
+    url: "https://yjs.dev"
+    version: "13.6.27"
+  - type: software
+    title: "Monaco Editor"
+    authors:
+      - name: "Microsoft Corporation"
+    year: 2023
+    url: "https://microsoft.github.io/monaco-editor/"
+  - type: software
+    title: "Hocuspocus"
+    authors:
+      - name: "Tiptap GmbH"
+    year: 2023
+    url: "https://tiptap.dev/hocuspocus"
+    version: "3.2.3"
+  - type: article
+    title: "Conflict-free Replicated Data Types"
+    authors:
+      - family-names: "Shapiro"
+        given-names: "Marc"
+      - family-names: "Preguiça"
+        given-names: "Nuno"
+      - family-names: "Baquero"
+        given-names: "Carlos"
+      - family-names: "Zawirski"
+        given-names: "Marek"
+    year: 2011
+    conference: "SSS 2011: Stabilization, Safety, and Security of Distributed Systems"
+    doi: "10.1007/978-3-642-24550-3_29"
+  - type: article
+    title: "Near Real-Time Peer-to-Peer Shared Editing on Extensible Data Types"
+    authors:
+      - family-names: "Jahns"
+        given-names: "Kevin"
+    year: 2019
+    conference: "GROUP '19: Proceedings of the 2019 ACM International Conference on Supporting Group Work"
+    doi: "10.1145/3361125.3361126"
+  - type: software
+    title: "React"
+    authors:
+      - name: "Meta Platforms, Inc."
+    year: 2023
+    url: "https://react.dev"
+    version: "19.1.0"
+  - type: software
+    title: "Express.js"
+    authors:
+      - family-names: "Holowaychuk"
+        given-names: "TJ"
+    year: 2023
+    url: "https://expressjs.com"
+    version: "5.1.0"
+  - type: software
+    title: "AWS SDK for JavaScript"
+    authors:
+      - name: "Amazon Web Services, Inc."
+    year: 2023
+    url: "https://aws.amazon.com/sdk-for-javascript/"
+    version: "3.882.0"
+contact:
+  - family-names: "Pugachev"
+    given-names: "Sergey"
+    email: "support@codecrdt.io"
+    affiliation: "CodeCRDT Project"

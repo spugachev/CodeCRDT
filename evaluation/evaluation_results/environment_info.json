@@ -1,0 +1,25 @@
+{
+  "timestamp": "2025-10-13T18:18:02.170041",
+  "system": {
+    "platform": "Linux",
+    "platform_release": "6.8.0-71-generic",
+    "platform_version": "#71-Ubuntu SMP PREEMPT_DYNAMIC Tue Jul 22 16:44:45 UTC 2025",
+    "architecture": "aarch64",
+    "processor": "aarch64",
+    "python_version": "3.12.3 (main, Aug 14 2025, 17:47:21) [GCC 13.3.0]",
+    "python_implementation": "CPython"
+  },
+  "configuration": {
+    "backend_url": "http://localhost:3001",
+    "runs_per_prompt": 50,
+    "max_concurrent_requests": 1,
+    "confidence_level": 0.95,
+    "outlier_detection": true,
+    "random_seed": 42
+  },
+  "notes": {
+    "temperature": "0.0 for reproducibility",
+    "randomization": "Execution order randomized to prevent order effects",
+    "statistical_corrections": "Bonferroni correction applied for multiple comparisons"
+  }
+}

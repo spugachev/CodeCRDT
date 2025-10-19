@@ -1,0 +1,14 @@
+backend_url: http://localhost:3001
+api_version: v1
+runs_per_prompt: 50
+max_concurrent_requests: 1
+request_timeout: 120
+retry_attempts: 3
+retry_delay: 2.0
+output_dir: ./output
+save_raw_responses: true
+save_evaluation_scores: true
+generate_visualizations: true
+confidence_level: 0.95
+outlier_detection: true
+outlier_threshold: 3.0

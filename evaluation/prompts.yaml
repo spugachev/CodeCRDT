@@ -1,0 +1,97 @@
+prompts:
+  - id: registration_page
+    name: User Registration Page
+    category: simple
+    description: Generate a beautiful user registration page
+    prompt: Generate a beautiful user registration page with form validation, smooth
+      animations, gradient background, and modern design
+    expected_components:
+      - form
+      - validation
+      - animations
+    complexity_score: 3.0
+    tags:
+      - form
+      - ui
+      - authentication
+  - id: tic_tac_toe
+    name: Tic Tac Toe Game
+    category: game
+    description: Create a Tic Tac Toe game
+    prompt: Create Tic tac toe game with smooth animations, AI opponent, score tracking,
+      and modern UI
+    expected_components:
+      - game-logic
+      - ai
+      - animations
+    complexity_score: 4.0
+    tags:
+      - game
+      - ai
+      - interactive
+  - id: dashboard
+    name: Analytics Dashboard
+    category: intermediate
+    description: Generate a dashboard page
+    prompt: Generate an analytics dashboard page with charts, data tables, real-time
+      updates, dark mode, and responsive design
+    expected_components:
+      - charts
+      - tables
+      - real-time
+    complexity_score: 6.0
+    tags:
+      - dashboard
+      - analytics
+      - charts
+  - id: pomodoro_timer
+    name: Pomodoro Timer
+    category: productivity
+    description: Gorgeous Pomodoro timer with animations
+    prompt: Build a gorgeous Pomodoro timer with a circular animated progress ring,
+      glass morphism design, smooth color transitions between work/break modes, floating
+      particles background, and satisfying completion animations with sound
+    expected_components:
+      - timer
+      - animations
+      - glassmorphism
+      - audio
+    complexity_score: 7.0
+    tags:
+      - productivity
+      - animations
+      - ui
+  - id: markdown_editor
+    name: Premium Markdown Editor
+    category: productivity
+    description: Premium markdown editor with live preview
+    prompt: Create a premium markdown editor with dark theme, syntax highlighting with
+      vibrant colors, smooth live preview transitions, floating toolbar with hover effects,
+      and code block styling like VS Code
+    expected_components:
+      - editor
+      - preview
+      - syntax-highlighting
+      - toolbar
+    complexity_score: 8.0
+    tags:
+      - editor
+      - markdown
+      - productivity
+  - id: algorithm_visualizer
+    name: Algorithm Visualizer
+    category: creative
+    description: Algorithm visualization tool
+    prompt: Build a captivating algorithm visualizer with neon colored bars, smooth
+      height transitions, glowing comparison indicators, trail effects during swaps,
+      and a futuristic dashboard design with animated controls
+    expected_components:
+      - visualization
+      - animations
+      - controls
+      - algorithms
+    complexity_score: 9.0
+    tags:
+      - education
+      - visualization
+      - algorithms
