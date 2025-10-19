@@ -257,7 +257,7 @@ uv run python -m evaluation.visualizer \
 ### Project Structure
 
 ```
-collaborative-agents/
+codecrdt/
 ├── backend/src/
 │   ├── agents/              # LLM agent implementations
 │   │   ├── outliner-agent.ts

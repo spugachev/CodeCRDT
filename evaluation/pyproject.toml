@@ -6,13 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 authors = [{ name = "Sergey Pugachev", email = "sergey@spugachev.com" }]
 license = { text = "MIT" }
-keywords = [
-    "CRDT",
-    "evaluation",
-    "benchmarking",
-    "code-generation",
-    "collaborative-agents",
-]
+keywords = ["CRDT", "evaluation", "benchmarking", "code-generation", "codecrdt"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",

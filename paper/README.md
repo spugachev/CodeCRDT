@@ -47,7 +47,9 @@ paper/
 ## Prerequisites
 
 ### Required
+
 - **LaTeX distribution:**
+
   - macOS: [MacTeX](https://www.tug.org/mactex/) (3.9 GB)
   - Linux: `sudo apt-get install texlive-full`
   - Windows: [MiKTeX](https://miktex.org/)
@@ -55,6 +57,7 @@ paper/
 - **Basic tools:** `pdflatex`, `bibtex`, `make`
 
 ### Optional (for enhanced features)
+
 - `latexmk` - for watch mode
 - `pandoc` - for HTML conversion
 - `chktex` - for LaTeX syntax checking
@@ -65,6 +68,7 @@ paper/
 > The Makefile checks for these optional tools and prints a helpful warning instead of failing when one is missing.
 
 ### Installation (macOS)
+
 ```bash
 # Install MacTeX (includes all LaTeX tools)
 brew install --cask mactex
@@ -75,6 +79,7 @@ brew install aspell
 ```
 
 ### Installation (Ubuntu/Debian)
+
 ```bash
 # Install LaTeX
 sudo apt-get install texlive-full
@@ -93,12 +98,14 @@ sudo apt-get install latexmk pandoc aspell texlive-extra-utils
 ## Building the Paper
 
 ### Standard Build
+
 ```bash
 # Full build with bibliography
 make pdf
 ```
 
 This runs:
+
 1. `pdflatex` - First pass (generates aux files)
 2. `bibtex` - Process bibliography
 3. `pdflatex` - Second pass (incorporate references)
@@ -107,6 +114,7 @@ This runs:
 Output: `output/paper.pdf`
 
 ### Quick Build
+
 ```bash
 # Single pass (no bibliography updates)
 make quick
@@ -115,6 +123,7 @@ make quick
 Use for rapid iteration when not changing references.
 
 ### Watch Mode
+
 ```bash
 # Auto-rebuild on file changes
 make watch
@@ -143,6 +152,7 @@ make stats
 ```
 
 Shows:
+
 - Word count (approximate)
 - Page count
 - Number of figures
@@ -150,6 +160,7 @@ Shows:
 - Number of references
 
 Example output:
+
 ```
 Words in text: 5234
 Pages: 12
@@ -167,6 +178,7 @@ make arxiv
 ```
 
 Creates `output/arxiv-submission.tar.gz` containing:
+
 - All LaTeX source files
 - Bibliography
 - All figures
@@ -175,13 +187,16 @@ Creates `output/arxiv-submission.tar.gz` containing:
 Upload this tarball to [https://arxiv.org/submit](https://arxiv.org/submit)
 
 #### arXiv Categories
+
 Suggested primary categories:
+
 - **cs.SE** - Software Engineering
 - **cs.AI** - Artificial Intelligence
 - **cs.DC** - Distributed Computing
 - **cs.PL** - Programming Languages
 
 Secondary categories:
+
 - **cs.LG** - Machine Learning
 - **cs.HC** - Human-Computer Interaction
 
@@ -214,6 +229,7 @@ For conference-specific formats, see [templates/README.md](templates/README.md)
 ## Quality Checks
 
 ### Syntax Check
+
 ```bash
 make check
 ```
@@ -221,6 +237,7 @@ make check
 Checks for common LaTeX errors and warnings.
 
 ### Spell Check
+
 ```bash
 make spell
 ```
@@ -228,6 +245,7 @@ make spell
 Interactive spell checking. Requires `aspell`.
 
 ### Word Count
+
 ```bash
 make wordcount
 ```
@@ -237,11 +255,13 @@ Detailed word count by section.
 ## Validation
 
 ### Validate arXiv Package
+
 ```bash
 make validate-arxiv
 ```
 
 Verifies:
+
 - All required files present
 - Package size (should be < 10 MB for arXiv)
 - File structure correct
@@ -259,6 +279,7 @@ make distclean
 ## Advanced Features
 
 ### Creating Diffs
+
 ```bash
 # Compare with previous version
 # 1. Copy old version to src/paper-old.tex
@@ -269,6 +290,7 @@ make diff
 Creates `output/paper-diff.pdf` with changes highlighted.
 
 ### Extract Text
+
 ```bash
 # Extract plain text from PDF
 make text
@@ -277,6 +299,7 @@ make text
 Useful for checking content without LaTeX formatting.
 
 ### HTML Version
+
 ```bash
 # Generate HTML version (requires pandoc)
 ./scripts/prepare-submission.sh all
@@ -287,6 +310,7 @@ Creates `output/paper.html` for web viewing.
 ## Editing Workflow
 
 ### Recommended Workflow
+
 1. **Start watch mode:** `make watch`
 2. **Edit in your favorite editor:**
    - VSCode with LaTeX Workshop extension
@@ -304,15 +328,19 @@ Creates `output/paper.html` for web viewing.
 ### What to Edit
 
 #### Main Content
+
 - `src/paper.tex` - Main document with all sections
 
 #### Separate Files
+
 - `src/abstract.tex` - Abstract (reused for arXiv metadata)
 - `src/acknowledgments.tex` - Acknowledgments
 - `src/references.bib` - Bibliography entries
 
 #### After Evaluation
+
 Replace placeholder text with actual results:
+
 - Section 6 (Results): Fill in performance numbers
 - Tables: Add evaluation data
 - Figures: Add plots from `evaluation/` results
@@ -320,29 +348,38 @@ Replace placeholder text with actual results:
 ## Common Issues
 
 ### Issue: "File not found"
+
 **Solution:** Check that all `\input{}` paths are correct. Files should be relative to `src/` directory.
 
 ### Issue: Bibliography not showing
+
 **Solution:** Run full build cycle:
+
 ```bash
 make clean
 make pdf
 ```
 
 ### Issue: Figures not appearing
+
 **Solution:**
+
 1. Ensure figures are in `figures/` directory
 2. Use correct file extension (`.pdf` for vector, `.png` for raster)
 3. Check LaTeX logs in `output/paper.log`
 
 ### Issue: "Overfull hbox" warnings
+
 **Solution:** LaTeX warnings about text overflow. Usually cosmetic, but fix for final version:
+
 - Reword sentences
 - Add manual line breaks
 - Adjust figure placement
 
 ### Issue: PDF not updating
+
 **Solution:**
+
 ```bash
 make distclean
 make pdf
@@ -351,6 +388,7 @@ make pdf
 ## Submission Checklist
 
 ### Before arXiv Submission
+
 - [ ] All TODOs removed from paper
 - [ ] Abstract < 250 words
 - [ ] All figures have captions and are referenced in text
@@ -363,6 +401,7 @@ make pdf
 - [ ] Run `make validate-arxiv`
 
 ### Before Conference Submission
+
 - [ ] Paper meets page limit
 - [ ] Uses correct conference template
 - [ ] Anonymized if double-blind review
@@ -382,6 +421,7 @@ For adapting to specific conference formats:
 5. Update Makefile with conference-specific target
 
 Popular conferences:
+
 - **NLP/AI:** ACL, NeurIPS, ICLR, EMNLP
 - **Systems:** SOSP, OSDI, SIGCOMM
 - **SE:** ICSE, FSE, ASE
@@ -390,6 +430,7 @@ Popular conferences:
 ## Tips for Academic Writing
 
 ### Structure
+
 - **Abstract:** 150-250 words, summarize contributions
 - **Introduction:** Motivation, key insight, contributions list
 - **Evaluation:** Clear research questions, methodology, results
@@ -397,18 +438,21 @@ Popular conferences:
 - **Conclusion:** Brief summary, impact, future work
 
 ### Figures
+
 - Vector graphics (PDF) when possible
 - Minimum 8pt font size in figures
 - Consistent color scheme
 - Clear captions with figure interpretation
 
 ### Tables
+
 - Use `\toprule`, `\midrule`, `\bottomrule` from `booktabs`
 - Align numbers on decimal point
 - Bold or highlight key results
 - Keep tables simple and readable
 
 ### References
+
 - Cite liberally but relevantly
 - Include recent work (last 2-3 years)
 - Cite both foundational and recent papers
@@ -417,15 +461,18 @@ Popular conferences:
 ## Resources
 
 ### LaTeX Help
+
 - [Overleaf Documentation](https://www.overleaf.com/learn)
 - [TeX StackExchange](https://tex.stackexchange.com/)
 - [LaTeX Wikibook](https://en.wikibooks.org/wiki/LaTeX)
 
 ### Academic Writing
+
 - [How to Write a Great Research Paper](https://www.microsoft.com/en-us/research/academic-program/write-great-research-paper/)
 - [Conference Paper Templates](https://www.acm.org/publications/proceedings-template)
 
 ### arXiv
+
 - [arXiv Submission Guide](https://arxiv.org/help/submit)
 - [arXiv Best Practices](https://arxiv.org/help/submit_tex)
 
@@ -434,8 +481,9 @@ Popular conferences:
 For common issues and solutions, see the [LaTeX troubleshooting guide](https://en.wikibooks.org/wiki/LaTeX/Errors_and_Warnings).
 
 For project-specific questions, check:
-- [Project Issues](https://github.com/spugachev/collaborative-agents/issues)
-- [Discussions](https://github.com/spugachev/collaborative-agents/discussions)
+
+- [Project Issues](https://github.com/spugachev/codecrdt/issues)
+- [Discussions](https://github.com/spugachev/codecrdt/discussions)
 
 ## License
 
@@ -445,7 +493,7 @@ This paper infrastructure is part of the CodeCRDT project and is licensed under 
 
 - **Author:** Sergey Pugachev
 - **ORCID:** 0009-0008-5134-6411
-- **Repository:** https://github.com/spugachev/collaborative-agents
+- **Repository:** https://github.com/spugachev/codecrdt
 
 ## Makefile Quick Reference
 

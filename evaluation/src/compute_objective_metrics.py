@@ -249,7 +249,7 @@ def compute_metrics_for_result(result_file: str) -> Dict:
 
 def main():
     """Main analysis pipeline."""
-    results_dir = "/Users/spugachev/Desktop/dev/collaborative-agents/evaluation/evaluation_results"
+    results_dir = "/Users/codecrdt/evaluation/evaluation_results"
 
     print("Computing objective metrics for all evaluation results...")
     print("This will take several minutes (~600 files × ~5 seconds each)...")

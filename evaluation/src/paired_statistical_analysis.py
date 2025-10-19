@@ -188,7 +188,7 @@ def analyze_metric(df: pd.DataFrame, metric: str) -> Dict:
 
 def main():
     """Main analysis pipeline."""
-    results_dir = "/Users/spugachev/Desktop/dev/collaborative-agents/evaluation/evaluation_results"
+    results_dir = "/Users/codecrdt/evaluation/evaluation_results"
 
     print("Loading evaluation data...")
     df = load_evaluation_data(results_dir)

@@ -2,7 +2,7 @@
 
 **Author:** Sergey Pugachev
 **ORCID:** 0009-0008-5134-6411
-**Repository:** https://github.com/spugachev/collaborative-agents
+**Repository:** https://github.com/spugachev/codecrdt
 **License:** MIT
 
 ---

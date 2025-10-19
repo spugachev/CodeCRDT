@@ -246,7 +246,7 @@ def main():
     print("COMPUTING OBJECTIVE METRICS FOR ALL EVALUATION RESULTS")
     print("="*70)
 
-    results_dir = Path("/Users/spugachev/Desktop/dev/collaborative-agents/evaluation/evaluation_results")
+    results_dir = Path("/Users/codecrdt/evaluation/evaluation_results")
     project_dir = results_dir / "objective_evaluation_project"
     generated_dir = project_dir / "generated"
 

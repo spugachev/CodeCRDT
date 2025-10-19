@@ -93,7 +93,7 @@ def main():
     print("="*70)
 
     # Load data
-    csv_file = Path("/Users/spugachev/Desktop/dev/collaborative-agents/evaluation/evaluation_results/objective_metrics.csv")
+    csv_file = Path("/Users/codecrdt/evaluation/evaluation_results/objective_metrics.csv")
     df = pd.read_csv(csv_file)
 
     print(f"\nLoaded {len(df)} results")
@@ -151,7 +151,7 @@ def main():
         print(f"  Significance: {sig_level}")
 
     # Save results
-    output_file = Path("/Users/spugachev/Desktop/dev/collaborative-agents/evaluation/evaluation_results/objective_metrics_analysis.json")
+    output_file = Path("/Users/codecrdt/evaluation/evaluation_results/objective_metrics_analysis.json")
     with open(output_file, 'w') as f:
         json.dump(all_results, f, indent=2)
 

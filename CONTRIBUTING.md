@@ -27,7 +27,7 @@ Before you begin contributing, please:
 
 1. Fork the repository on GitHub
 2. Read the [README.md](README.md) for project overview
-3. Check the [Issues](https://github.com/spugachev/collaborative-agents/issues) page for existing bugs or feature requests
+3. Check the [Issues](https://github.com/spugachev/codecrdt/issues) page for existing bugs or feature requests
 4. Join our [Discord community](https://discord.gg/codecrdt) for discussions
 
 ## Development Setup
@@ -45,8 +45,8 @@ Before you begin contributing, please:
 1. **Fork and clone the repository:**
 
    ```bash
-   git clone https://github.com/YOUR_USERNAME/collaborative-agents.git
-   cd collaborative-agents
+   git clone https://github.com/YOUR_USERNAME/codecrdt.git
+   cd codecrdt
    ```
 
 2. **Install backend dependencies:**
@@ -109,8 +109,8 @@ We welcome various types of contributions:
 
 ### Finding Something to Work On
 
-- Check issues labeled [`good first issue`](https://github.com/spugachev/collaborative-agents/labels/good%20first%20issue) for beginner-friendly tasks
-- Look for [`help wanted`](https://github.com/spugachev/collaborative-agents/labels/help%20wanted) labels for tasks where we need assistance
+- Check issues labeled [`good first issue`](https://github.com/spugachev/codecrdt/labels/good%20first%20issue) for beginner-friendly tasks
+- Look for [`help wanted`](https://github.com/spugachev/codecrdt/labels/help%20wanted) labels for tasks where we need assistance
 - Review the [Roadmap](README.md#roadmap) for planned features
 - Propose your own ideas by creating a new issue
 
@@ -218,7 +218,7 @@ Update the README when:
 1. **Update your fork:**
 
    ```bash
-   git remote add upstream https://github.com/spugachev/collaborative-agents.git
+   git remote add upstream https://github.com/spugachev/codecrdt.git
    git fetch upstream
    git checkout main
    git merge upstream/main
@@ -315,7 +315,7 @@ Brief description of changes
 
 Contributors are recognized in:
 
-- [Contributors list](https://github.com/spugachev/collaborative-agents/graphs/contributors)
+- [Contributors list](https://github.com/spugachev/codecrdt/graphs/contributors)
 - Release notes
 - Project documentation
 
