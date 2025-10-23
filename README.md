@@ -11,6 +11,8 @@
 
 ## 📄 Research Paper
 
+**[arXiv:2510.18893](https://arxiv.org/abs/2510.18893)** - Published on ArXiv (cs.DC)
+
 **[SCIENCE.md](./SCIENCE.md)** - Detailed scientific documentation including methodology, results, and analysis
 
 ## 🔬 Key Findings
@@ -310,11 +312,15 @@ The evaluation includes 6 TypeScript/React tasks spanning the coupling spectrum:
 If you use this work in your research, please cite:
 
 ```bibtex
-@inproceedings{pugachev2025codecrdt,
+@misc{pugachev2025codecrdt,
   title={CodeCRDT: Observation-Driven Coordination for Multi-Agent LLM Code Generation},
-  author={Pugachev, Sergey},
-  booktitle={Conference on Machine Learning and Systems (MLSys)},
-  year={2025}
+  author={Sergey Pugachev},
+  year={2025},
+  eprint={2510.18893},
+  archivePrefix={arXiv},
+  primaryClass={cs.DC},
+  url={https://arxiv.org/abs/2510.18893},
+  doi={10.48550/arXiv.2510.18893}
 }
 ```
 
