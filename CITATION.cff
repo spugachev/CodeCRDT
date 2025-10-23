@@ -30,8 +30,14 @@ identifiers:
   - type: url
     value: 'https://github.com/spugachev/codecrdt'
     description: 'GitHub Repository'
+  - type: doi
+    value: '10.48550/arXiv.2510.18893'
+    description: 'arXiv DOI'
+  - type: other
+    value: 'arXiv:2510.18893'
+    description: 'arXiv identifier'
 preferred-citation:
-  type: conference-paper
+  type: article
   title: 'CodeCRDT: Observation-Driven Coordination for Multi-Agent LLM Code Generation'
   authors:
     - family-names: 'Pugachev'
@@ -39,11 +45,13 @@ preferred-citation:
       orcid: 'https://orcid.org/0009-0008-5134-6411'
       affiliation: 'Independent Researcher'
   year: 2025
-  collection-title: 'Proceedings of the Conference on Machine Learning and Systems'
-  conference:
-    name: 'Conference on Machine Learning and Systems'
-  abbreviation: 'MLSys 2025'
-  url: 'https://github.com/spugachev/codecrdt'
+  month: 10
+  doi: '10.48550/arXiv.2510.18893'
+  url: 'https://arxiv.org/abs/2510.18893'
+  notes: 'arXiv preprint arXiv:2510.18893 [cs.DC]'
+  repository: 'https://arxiv.org/abs/2510.18893'
+  database-provider:
+    name: 'arXiv'
 references:
   - type: software
     title: 'Yjs'
